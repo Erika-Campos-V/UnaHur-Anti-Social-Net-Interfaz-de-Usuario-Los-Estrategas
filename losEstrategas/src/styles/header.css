@@ -17,8 +17,23 @@
 }
 
 .navbar-nav .nav-link:hover {
-  color: black !important;
+  color:  black !important;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
 }
 .navbar-brand img {
   vertical-align: middle;
+}
+
+.logo-navbar {
+  height: 50px;
+  width: auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+}
+
+.logo-navbar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+
 }

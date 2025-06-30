@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "./context/UserContext"; // o "./context/UserContext.js" según tu estructura
+import { UserContext } from "./context/UserContext"; 
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";

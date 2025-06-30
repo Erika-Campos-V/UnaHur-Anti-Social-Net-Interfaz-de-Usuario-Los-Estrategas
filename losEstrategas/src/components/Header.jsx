@@ -13,7 +13,7 @@ const Header = () => {
         <img
           src={logo}
           alt="Logo"
-          style={{ height: "40px", marginRight: "10px" }}
+          className="logo-navbar"
         />
         UnaHur Anti - Social Net
       </Link>
