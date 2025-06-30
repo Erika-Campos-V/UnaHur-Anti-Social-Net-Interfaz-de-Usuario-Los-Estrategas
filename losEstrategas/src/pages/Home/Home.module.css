@@ -1,0 +1,11 @@
+.feed {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .feed {
+        flex-direction: column;
+    }
+}
