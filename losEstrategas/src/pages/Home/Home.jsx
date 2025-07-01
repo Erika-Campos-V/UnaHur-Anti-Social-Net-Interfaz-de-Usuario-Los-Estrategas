@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import styles from './Home.module.css'
+import styles from './Home.module.css';
 import { Link } from 'react-router-dom';
-import noImage from '../../assets/noImage.png'
-import chatBubble from '../../assets/mensajero.png'
-import noComments from '../../assets/mensajeroGris.png'
-import clock from '../../assets/clock.png'
-import user from '../../assets/usuario.png'
-import wrongImage from '../../assets/wrongImage.png'
+import noImage from '../../assets/noImage.png';
+import chatBubble from '../../assets/mensajero.png';
+import noComments from '../../assets/mensajeroGris.png';
+import clock from '../../assets/clock.png';
+import user from '../../assets/usuario.png';
+import wrongImage from '../../assets/wrongImage.png';
 
 const Home = () => {
 
@@ -119,7 +119,7 @@ const Home = () => {
               </ListGroup.Item>
             </ListGroup>
             <Card.Body>
-              <Link to="/post/:id" className='btn btn-success' style={{backgroundColor: "#53ac59"}}>Ver publicacion completa</Link>
+              <Link to={`/post/${post.id}`} className='btn btn-success' style={{backgroundColor: "#53ac59"}}>Ver publicacion completa</Link>
             </Card.Body>
           </Card>
         ))}

@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
-import PostDetail from "./pages/PostDetail";
+import PostDetail from "./pages/PostDetail/PostDetail";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -27,6 +27,7 @@ const App = () => {
             <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
             <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
             <Route path="/new-post" element={user ? <NewPost /> : <Navigate to="/login" />} />
+            <Route path="/*" element={<Home />} />
           </Routes>
         </main>
         <Footer />
