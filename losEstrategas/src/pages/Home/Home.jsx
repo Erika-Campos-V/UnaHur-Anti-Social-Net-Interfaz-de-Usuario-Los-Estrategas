@@ -7,6 +7,7 @@ import noImage from '../../assets/noImage.png'
 import chatBubble from '../../assets/mensajero.png'
 import noComments from '../../assets/mensajeroGris.png'
 import clock from '../../assets/clock.png'
+import user from '../../assets/usuario.png'
 
 const Home = () => {
 
@@ -81,7 +82,10 @@ const Home = () => {
               src={images[post.id]?.url || noImage}
             />
             <Card.Body>
-              <Card.Title>Usuario: {post.User.nickName}</Card.Title>
+              <Card.Title>
+                Usuario: {post.User.nickName}
+                <img src={user} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px'}} />
+              </Card.Title>
               <Card.Text>
                 {post.description}
               </Card.Text>
