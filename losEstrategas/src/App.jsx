@@ -25,7 +25,7 @@ const App = () => {
             <Route path="/post/:id" element={<PostDetail />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
-            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login"/>}/>
             <Route path="/new-post" element={user ? <NewPost /> : <Navigate to="/login" />} />
           </Routes>
         </main>
