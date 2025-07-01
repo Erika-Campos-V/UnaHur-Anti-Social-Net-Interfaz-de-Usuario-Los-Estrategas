@@ -8,6 +8,7 @@ import chatBubble from '../../assets/mensajero.png'
 import noComments from '../../assets/mensajeroGris.png'
 import clock from '../../assets/clock.png'
 import user from '../../assets/usuario.png'
+import wrongImage from '../../assets/wrongImage.png'
 
 const Home = () => {
 
@@ -80,6 +81,7 @@ const Home = () => {
             <Card.Img
               variant="top"
               src={images[post.id]?.url || noImage}
+              onError={img => { img.target.onerror = null; img.target.src = wrongImage; }}
             />
             <Card.Body>
               <Card.Title>
@@ -95,7 +97,7 @@ const Home = () => {
               {/* Agrega los tags al post */}
               <ListGroup.Item>
                 Tags: {(post.Tags.length > 0)
-                  ? post.Tags.map((tag) => (tag.name)).join(' ')
+                  ? post.Tags.map((tag) => (<span className={styles.tag}>{tag.name}</span>))
                   : 'Ningun tag asociado'}
               </ListGroup.Item>
 
@@ -115,7 +117,7 @@ const Home = () => {
               </ListGroup.Item>
             </ListGroup>
             <Card.Body>
-              <Link to="/post/:id" className='btn btn-success'>Ver publicacion completa</Link>
+              <Link to="/post/:id" className='btn btn-success' style={{backgroundColor: "#53ac59"}}>Ver publicacion completa</Link>
             </Card.Body>
           </Card>
         ))}

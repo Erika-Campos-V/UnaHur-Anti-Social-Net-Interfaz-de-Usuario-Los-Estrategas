@@ -6,6 +6,14 @@
     flex-wrap: wrap;
 }
 
+.tag {
+    background-color: #53ac59;
+    padding: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
 @media (max-width: 600px) {
     .feed {
         flex-direction: column;
