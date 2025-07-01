@@ -78,6 +78,8 @@ const Home = () => {
               Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
               <img src={clock} alt="Fecha de Publicacion" style={{ width: '20px', marginLeft: '8px', marginTop: '-4px' }} />
             </Card.Body>
+            
+            {/* Carga de imagen, si el url es incorrecto o no tiene imagen, carga otra */}
             <Card.Img
               variant="top"
               src={images[post.id]?.url || noImage}
