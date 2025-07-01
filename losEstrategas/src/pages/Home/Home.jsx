@@ -68,8 +68,9 @@ const Home = () => {
 
       {/* Feed */}
       <div className={styles.feed}>
-        {posts.map((post) => (
-          <Card style={{ width: '25rem' }}>
+        {/* Se invierte la lista de posts, para que aparezcan primero los mas recientes */}
+        {posts.slice().reverse().map((post) => (
+          <Card style={{ width: '25rem' }} key={post.id}>
             <Card.Body>
               {/* Formatea la fecha de publicacion, para que sea mas legible */}
               Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
