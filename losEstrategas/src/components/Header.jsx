@@ -8,7 +8,7 @@ const Header = () => {
   const { user, logout } = useContext(UserContext);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-custom-green px-3">
       <Link className="navbar-brand d-flex align-items-center" to="/">
         <img
           src={logo}
