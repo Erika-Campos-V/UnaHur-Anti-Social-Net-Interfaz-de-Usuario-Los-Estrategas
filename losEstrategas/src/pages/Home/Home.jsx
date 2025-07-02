@@ -15,7 +15,7 @@ import { UserContext } from "../../context/UserContext";
 
 
 const Home = () => {
-
+  
   // Estado para guardar los posts
   const [posts, setPosts] = useState([])
 
@@ -25,8 +25,9 @@ const Home = () => {
   // Estado para guardar las imagenes de un post
   const [images, setImages] = useState({})
 
+  
   const { user } = useContext(UserContext);
-  console.log("usuario actual:", user);
+ 
   async function getPosts() {
     try {
       const data = await fetch('http://localhost:3001/posts')

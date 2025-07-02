@@ -9,10 +9,10 @@ const NewPost = () => {
   const [description, setDescription] = useState("");
   const [imageUrls, setImageUrls] = useState([""]);
   const [tags, setTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [newTag, setNewTag] = useState(""); // NUEVO estado para crear una etiqueta
+  const [selectedTagIds, setSelectedTagIds] = useState([]); // IDs de tags tildados
+  const [newTag, setNewTag] = useState(""); // Nombre del tag nuevo
 
-  // Obtener etiquetas desde la API
+  // Obtener tags existentes
   useEffect(() => {
     fetch("http://localhost:3001/tags")
       .then(res => res.json())
@@ -20,6 +20,16 @@ const NewPost = () => {
       .catch(err => console.error("Error al cargar tags", err));
   }, []);
 
+  // Manejar selección de checkboxes
+  const handleCheckboxChange = (tagId) => {
+    setSelectedTagIds(prev => 
+      prev.includes(tagId)
+        ? prev.filter(id => id !== tagId)
+        : [...prev, tagId]
+    );
+  };
+
+  // Agregar campo de imagen extra
   const addImageField = () => {
     setImageUrls([...imageUrls, ""]);
   };
@@ -30,14 +40,15 @@ const NewPost = () => {
     setImageUrls(newUrls);
   };
 
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!description.trim()) return alert("La descripción es obligatoria.");
 
     try {
-      let tagIds = [...selectedTags]; // Clonamos los tags seleccionados (por id)
+      let tagIds = [...selectedTagIds];
 
-      // Si hay nuevo tag, lo creamos primero
+      // Si hay nuevo tag, crearlo primero y agregar su ID
       if (newTag.trim()) {
         const newTagRes = await fetch("http://localhost:3001/tags", {
           method: "POST",
@@ -66,7 +77,7 @@ const NewPost = () => {
 
       const newPost = await postRes.json();
 
-      // Crear imágenes asociadas
+      // Crear imágenes
       for (const url of imageUrls) {
         if (url.trim()) {
           await fetch("http://localhost:3001/postimages", {
@@ -121,18 +132,22 @@ const NewPost = () => {
 
         <div className="mb-3">
           <label className="form-label">Etiquetas existentes</label>
-          <select
-            className="form-select"
-            multiple
-            value={selectedTags}
-            onChange={(e) =>
-              setSelectedTags(Array.from(e.target.selectedOptions, opt => opt.value))
-            }
-          >
+          <div className="d-flex flex-wrap">
             {tags.map(tag => (
-              <option key={tag.id} value={tag.id}>{tag.name}</option>
+              <div key={tag.id} className="form-check me-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id={`tag-${tag.id}`}
+                  checked={selectedTagIds.includes(tag.id)}
+                  onChange={() => handleCheckboxChange(tag.id)}
+                />
+                <label className="form-check-label" htmlFor={`tag-${tag.id}`}>
+                  {tag.name}
+                </label>
+              </div>
             ))}
-          </select>
+          </div>
         </div>
 
         <div className="mb-3">
@@ -140,7 +155,7 @@ const NewPost = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Ej: naturaleza, viajes..."
+            placeholder="Ej: viajes, comida..."
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
           />
