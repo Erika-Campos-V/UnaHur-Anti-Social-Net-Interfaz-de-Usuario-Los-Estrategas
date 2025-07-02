@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import styles from './Home.module.css'
+import styles from './Home.module.css';
 import { Link } from 'react-router-dom';
+
 import noImage from '../../assets/noImage.png'
 import chatBubble from '../../assets/mensajero.png'
 import noComments from '../../assets/mensajeroGris.png'
@@ -11,6 +12,7 @@ import clock from '../../assets/clock.png'
 import wrongImage from '../../assets/wrongImage.png'
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+
 
 const Home = () => {
 
