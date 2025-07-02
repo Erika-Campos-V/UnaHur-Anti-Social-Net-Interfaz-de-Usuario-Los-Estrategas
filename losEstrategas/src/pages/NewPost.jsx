@@ -9,27 +9,24 @@ const NewPost = () => {
   const [description, setDescription] = useState("");
   const [imageUrls, setImageUrls] = useState([""]);
   const [tags, setTags] = useState([]);
-  const [selectedTagIds, setSelectedTagIds] = useState([]); // IDs de tags tildados
-  const [newTag, setNewTag] = useState(""); // Nombre del tag nuevo
+  const [selectedTagIds, setSelectedTagIds] = useState([]);
 
-  // Obtener tags existentes
+  // Cargar tags existentes
   useEffect(() => {
     fetch("http://localhost:3001/tags")
-      .then(res => res.json())
-      .then(data => setTags(data))
-      .catch(err => console.error("Error al cargar tags", err));
+      .then((res) => res.json())
+      .then((data) => setTags(data))
+      .catch((err) => console.error("Error al cargar tags:", err));
   }, []);
 
-  // Manejar selección de checkboxes
   const handleCheckboxChange = (tagId) => {
-    setSelectedTagIds(prev => 
+    setSelectedTagIds((prev) =>
       prev.includes(tagId)
-        ? prev.filter(id => id !== tagId)
+        ? prev.filter((id) => id !== tagId)
         : [...prev, tagId]
     );
   };
 
-  // Agregar campo de imagen extra
   const addImageField = () => {
     setImageUrls([...imageUrls, ""]);
   };
@@ -40,28 +37,11 @@ const NewPost = () => {
     setImageUrls(newUrls);
   };
 
-  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!description.trim()) return alert("La descripción es obligatoria.");
 
     try {
-      let tagIds = [...selectedTagIds];
-
-      // Si hay nuevo tag, crearlo primero y agregar su ID
-      if (newTag.trim()) {
-        const newTagRes = await fetch("http://localhost:3001/tags", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: newTag.trim() })
-        });
-
-        if (!newTagRes.ok) throw new Error("No se pudo crear el nuevo tag");
-
-        const createdTag = await newTagRes.json();
-        tagIds.push(createdTag.id);
-      }
-
       // Crear el post
       const postRes = await fetch("http://localhost:3001/posts", {
         method: "POST",
@@ -69,11 +49,15 @@ const NewPost = () => {
         body: JSON.stringify({
           description,
           userId: user.id,
-          tags: tagIds
+          tagIds: selectedTagIds, // CAMBIO CLAVE: usar "tagIds"
         }),
       });
 
-      if (!postRes.ok) throw new Error("No se pudo crear el post");
+      if (!postRes.ok) {
+        const msg = await postRes.text();
+        console.error("Error al crear post:", msg);
+        throw new Error("No se pudo crear el post");
+      }
 
       const newPost = await postRes.json();
 
@@ -85,17 +69,17 @@ const NewPost = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               url,
-              postId: newPost.id
+              postId: newPost.id,
             }),
           });
         }
       }
 
       alert("Publicación creada exitosamente!");
-      navigate("/profile");
+      navigate("/"); // redirige al Home
     } catch (error) {
       console.error("Error al crear publicación:", error);
-      alert("Ocurrió un error al crear el post.");
+      alert("Ocurrió un error al crear la publicación.");
     }
   };
 
@@ -131,9 +115,9 @@ const NewPost = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Etiquetas existentes</label>
+          <label className="form-label">Etiquetas disponibles</label>
           <div className="d-flex flex-wrap">
-            {tags.map(tag => (
+            {tags.map((tag) => (
               <div key={tag.id} className="form-check me-3">
                 <input
                   className="form-check-input"
@@ -148,17 +132,6 @@ const NewPost = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Agregar nueva etiqueta (opcional)</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Ej: viajes, comida..."
-            value={newTag}
-            onChange={(e) => setNewTag(e.target.value)}
-          />
         </div>
 
         <button type="submit" className="btn btn-success">Publicar</button>
