@@ -6,6 +6,18 @@
     flex-wrap: wrap;
 }
 
+.card {
+    width: 25rem;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardImg {
+    height: 400px;
+    object-fit: cover;
+}
+
 .tag {
     background-color: #53ac59;
     padding: 5px;

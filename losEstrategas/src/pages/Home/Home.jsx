@@ -88,16 +88,17 @@ const Home = () => {
       <div className={styles.feed}>
         {/* Se invierte la lista de posts, para que aparezcan primero los mas recientes */}
         {posts.slice().reverse().map((post) => (
-          <Card style={{ width: '25rem' }} key={post.id}>
+          <Card className={styles.card} key={post.id}>
             <Card.Body>
               {/* Formatea la fecha de publicacion, para que sea mas legible */}
-              Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
+              Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', {hour12: false})}
               <img src={clock} alt="Fecha de Publicacion" style={{ width: '20px', marginLeft: '8px', marginTop: '-4px' }} />
             </Card.Body>
 
             {/* Carga de imagen, si el url es incorrecto o no tiene imagen, carga otra */}
             <Card.Img
               variant="top"
+              className={styles.cardImg}
               src={images[post.id]?.url || noImage}
               onError={img => { img.target.onerror = null; img.target.src = wrongImage; }}
             />
@@ -135,7 +136,7 @@ const Home = () => {
               </ListGroup.Item>
             </ListGroup>
             <Card.Body>
-              <Link to="/post/:id" className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Ver publicacion completa</Link>
+              <Link to={`/post/${post.id}`} className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Ver publicacion completa</Link>
             </Card.Body>
           </Card>
         ))}

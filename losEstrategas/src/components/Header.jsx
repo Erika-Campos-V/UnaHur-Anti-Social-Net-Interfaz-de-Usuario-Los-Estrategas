@@ -36,7 +36,7 @@ const Header = () => {
             <>
               <li className="nav-item nav-link text-white">Hola, {user.nickName}</li>
               <li className="nav-item">
-                <button className="btn btn-outline-light btn-sm" onClick={logout}>Cerrar sesión</button>
+                <button style={{marginTop: "4px"}} className="btn btn-outline-light btn-sm" onClick={logout}>Cerrar sesión</button>
               </li>
             </>
           ) : (
