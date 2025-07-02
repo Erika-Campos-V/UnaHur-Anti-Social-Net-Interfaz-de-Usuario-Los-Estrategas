@@ -3,12 +3,16 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import styles from './Home.module.css';
 import { Link } from 'react-router-dom';
-import noImage from '../../assets/noImage.png';
-import chatBubble from '../../assets/mensajero.png';
-import noComments from '../../assets/mensajeroGris.png';
-import clock from '../../assets/clock.png';
-import user from '../../assets/usuario.png';
-import wrongImage from '../../assets/wrongImage.png';
+
+import noImage from '../../assets/noImage.png'
+import chatBubble from '../../assets/mensajero.png'
+import noComments from '../../assets/mensajeroGris.png'
+import clock from '../../assets/clock.png'
+//import user from '../../assets/usuario.png'
+import wrongImage from '../../assets/wrongImage.png'
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
+
 
 const Home = () => {
 
@@ -21,6 +25,8 @@ const Home = () => {
   // Estado para guardar las imagenes de un post
   const [images, setImages] = useState({})
 
+  const { user } = useContext(UserContext);
+  console.log("usuario actual:", user);
   async function getPosts() {
     try {
       const data = await fetch('http://localhost:3001/posts')
@@ -60,13 +66,22 @@ const Home = () => {
     getPosts();
   }, [])
 
-
+// se muestra saludo y boton de crear newPost solo si esta logeado
   return (
     <div>
       <h1>Bienvenida a UnaHur Anti-Social Net</h1>
       <p>Este es el feed principal.</p>
 
-      <button style={{ marginBottom: "10px" }}>Si esta logueado: Crear Post - COMPLETAR!!!</button>
+      {user && (
+        <>
+          <h4 className="text-success mb-2">👋 Hola, {user.nickName}</h4>
+          <Link to="/new-post" className="btn btn-primary mb-3">
+            Crear nueva publicación
+          </Link>
+        </>
+      )}
+
+
 
       {/* Feed */}
       <div className={styles.feed}>
@@ -78,7 +93,7 @@ const Home = () => {
               Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
               <img src={clock} alt="Fecha de Publicacion" style={{ width: '20px', marginLeft: '8px', marginTop: '-4px' }} />
             </Card.Body>
-            
+
             {/* Carga de imagen, si el url es incorrecto o no tiene imagen, carga otra */}
             <Card.Img
               variant="top"
@@ -88,7 +103,7 @@ const Home = () => {
             <Card.Body>
               <Card.Title>
                 Usuario: {post.User.nickName}
-                <img src={user} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px'}} />
+                <img src={user} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px' }} />
               </Card.Title>
               <Card.Text>
                 {post.description}
@@ -119,7 +134,7 @@ const Home = () => {
               </ListGroup.Item>
             </ListGroup>
             <Card.Body>
-              <Link to={`/post/${post.id}`} className='btn btn-success' style={{backgroundColor: "#53ac59"}}>Ver publicacion completa</Link>
+              <Link to="/post/:id" className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Ver publicacion completa</Link>
             </Card.Body>
           </Card>
         ))}
