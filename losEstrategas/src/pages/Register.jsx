@@ -50,8 +50,8 @@ const Register = () => {
             email: email,
           }),
         });
-        if(user.ok){ //Si se registró correctamente te redirecciona al home
-          navigate("/");
+        if(user.ok){ //Si se registró correctamente te redirecciona al login
+          navigate("/login");
         }
       }
     } catch (error) {

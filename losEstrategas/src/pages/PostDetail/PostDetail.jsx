@@ -1,16 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import styles from "./PostDetail.module.css"
+
+//Imagenes e iconos para los post
 import noImage from "../../assets/noImage.png"
 import wrongImage from "../../assets/wrongImage.png"
 import clock from "../../assets/clock.png"
 import user from "../../assets/usuario.png"
 import tag from "../../assets/tag.png"
 
+//Me importo lo necesario para utilizar el user que se logueo
+//useContext se importo mas arriba.
+import { UserContext } from '../../context/UserContext';
+
 const PostDetail = () => {
 
   const { id } = useParams()
+
+  //Para guardar el usuario logueado
+  const { user } = useContext(UserContext)
 
   //Para guardar el post - CREO QUE NO SE USA
   const [post, setPost] = useState(null)
@@ -60,7 +69,7 @@ const PostDetail = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           content: comentarioNuevo,
-          userId: 1, //CAMBIAR DESPUES POR EL USER QUE ESTE PUESTO
+          userId: user.id, //CAMBIAR DESPUES POR EL USER QUE ESTE PUESTO
           postId: post.id
         })
       })
@@ -116,7 +125,7 @@ const PostDetail = () => {
           {/* Informacion de fecha */}
           <div style={{ display: 'flex', alignItems: 'center', paddingTop: '5px', borderBottom: '2px dashed #53ac59' }}>
             <img src={clock} alt="reloj" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
-            <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}</p>
+            <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', {hour12: false})}</p>
           </div>
 
           {/* Tags del post */}
@@ -161,12 +170,18 @@ const PostDetail = () => {
             }
 
             {/* Seccion para agregar un nuevo comentario */}
-            <form onSubmit={agregarComentario} style={{ marginTop: "30px", marginBottom: "20px" }}>
-              <textarea className={styles.form} name="Nuevo comentario" placeholder='Esto es lo que opino de tu post: ...' />
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button type='submit' className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Publicar comentario</button>
-              </div>
-            </form>
+            {user ? (
+              <form onSubmit={agregarComentario} style={{ marginTop: "30px", marginBottom: "20px" }}>
+                <textarea className={styles.form} name="Nuevo comentario" placeholder='Esto es lo que opino de tu post: ...' />
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <button type='submit' className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Publicar comentario</button>
+                </div>
+              </form>
+            ) : (
+              <p style={{ color: "#53ac59", fontWeight: "bold", marginLeft: "20px", marginTop: "30px" }}>
+                Iniciá sesión para comentar.
+              </p>
+            )}
           </div>
 
 
@@ -183,7 +198,7 @@ const PostDetail = () => {
         {/* Informacion de fecha */}
         <div style={{ display: 'flex', alignItems: 'center', paddingTop: '5px', borderBottom: '2px dashed #53ac59' }}>
           <img src={clock} alt="reloj" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
-          <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}</p>
+          <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', {hour12: false})}</p>
         </div>
 
         {/* Tags del post */}
@@ -224,12 +239,19 @@ const PostDetail = () => {
               </div>
             ))
           }
-          <form onSubmit={agregarComentario} style={{ marginTop: "30px", marginBottom: "20px" }}>
-            <textarea className={styles.form} name="Nuevo comentario" placeholder='Esto es lo que opino de tu post: ...' />
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <button type='submit' className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Publicar comentario</button>
-            </div>
-          </form>
+          {/* Agregar comentarios */}
+          {user ? (
+              <form onSubmit={agregarComentario} style={{ marginTop: "30px", marginBottom: "20px" }}>
+                <textarea className={styles.form} name="Nuevo comentario" placeholder='Esto es lo que opino de tu post: ...' />
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <button type='submit' className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Publicar comentario</button>
+                </div>
+              </form>
+            ) : (
+              <p style={{ color: "#53ac59", fontWeight: "bold", marginLeft: "20px", marginTop: "30px" }}>
+                Iniciá sesión para comentar.
+              </p>
+            )}
         </div>
 
 
@@ -237,30 +259,7 @@ const PostDetail = () => {
     )
   }
 
-  // return (
-  //   <div className={styles.grid}>
-  //     <div>
-  //       <Carousel>
-  //         {images.map((imagen) => (
-  //           <Carousel.Item className={styles.prueba}>
-  //             <img src={imagen.url || noImage} alt="Imagen" className="d-block mx-auto" 
-  //             onError={img => { img.target.onerror = null; img.target.src = wrongImage; }}/>
-  //           </Carousel.Item>
-  //         ))}
-  //       </Carousel>
-  //     </div>
-  //     <div>
-  //       <p>Div Prueba 2</p>
-  //     </div>
-  //   </div>
-  // );
-};
 
-{/* <h2>Detalle de la Publicación</h2>
-<p>Acá se mostrará el contenido completo del post, imágenes y comentarios.</p>
-<p>{!post
-  ? <p>Cargando...</p>
-  : <p>post obtenido: {post.description}</p>
-}</p> */}
+};
 
 export default PostDetail;
