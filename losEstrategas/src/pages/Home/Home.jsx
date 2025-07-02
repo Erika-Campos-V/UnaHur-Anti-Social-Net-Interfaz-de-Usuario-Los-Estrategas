@@ -15,7 +15,7 @@ import { UserContext } from "../../context/UserContext";
 
 
 const Home = () => {
-  
+
   // Estado para guardar los posts
   const [posts, setPosts] = useState([])
 
@@ -24,10 +24,15 @@ const Home = () => {
 
   // Estado para guardar las imagenes de un post
   const [images, setImages] = useState({})
+  //filtrar por tags
+  const [tags, setTags] = useState([]);
+  const [selectedTagIds, setSelectedTagIds] = useState([]);
+  //paginacion
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
 
-  
   const { user } = useContext(UserContext);
- 
+
   async function getPosts() {
     try {
       const data = await fetch('http://localhost:3001/posts')
@@ -55,19 +60,47 @@ const Home = () => {
       }))
       setImages(firstImage)
 
-
     } catch (error) {
       throw new Error('Error en la consulta a la base de datos, razon: ' + error)
     }
   }
 
-  //El codigo solamente se guarda los posts una unica vez
-  //Para que no este haciendo fetch a cada rato
   useEffect(() => {
     getPosts();
   }, [])
 
-// se muestra saludo y boton de crear newPost solo si esta logeado
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedTagIds]);
+
+
+  useEffect(() => {
+    fetch("http://localhost:3001/tags")
+      .then((res) => res.json())
+      .then((data) => setTags(data))
+      .catch((err) => console.error("Error al cargar tags:", err));
+  }, []);
+
+  //  Filtrado por tags seleccionados
+  const sortedPosts = [...posts].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  const filteredPosts = selectedTagIds.length > 0
+    ? sortedPosts.filter(post =>
+      post.Tags.some(tag => selectedTagIds.includes(tag.id))
+    )
+    : sortedPosts;
+
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+
+  // se muestra saludo y boton de crear newPost solo si esta logeado
   return (
     <div>
       <h1>Bienvenida a UnaHur Anti-Social Net</h1>
@@ -82,20 +115,40 @@ const Home = () => {
         </>
       )}
 
-
+      <h5>Filtrar por etiquetas:</h5>
+      <div className="mb-3 d-flex flex-wrap">
+        {tags.map(tag => (
+          <div key={tag.id} className="form-check me-3">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id={`tag-${tag.id}`}
+              checked={selectedTagIds.includes(tag.id)}
+              onChange={() =>
+                setSelectedTagIds(prev =>
+                  prev.includes(tag.id)
+                    ? prev.filter(id => id !== tag.id)
+                    : [...prev, tag.id]
+                )
+              }
+            />
+            <label className="form-check-label" htmlFor={`tag-${tag.id}`}>
+              {tag.name}
+            </label>
+          </div>
+        ))}
+      </div>
 
       {/* Feed */}
       <div className={styles.feed}>
-        {/* Se invierte la lista de posts, para que aparezcan primero los mas recientes */}
-        {posts.slice().reverse().map((post) => (
-          <Card className={styles.card} key={post.id}>
+
+        {currentPosts.slice().map((post) => (
+          <Card style={{ width: '25rem' }} key={post.id}>
             <Card.Body>
-              {/* Formatea la fecha de publicacion, para que sea mas legible */}
-              Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', {hour12: false})}
+              Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
               <img src={clock} alt="Fecha de Publicacion" style={{ width: '20px', marginLeft: '8px', marginTop: '-4px' }} />
             </Card.Body>
 
-            {/* Carga de imagen, si el url es incorrecto o no tiene imagen, carga otra */}
             <Card.Img
               variant="top"
               className={styles.cardImg}
@@ -112,19 +165,14 @@ const Home = () => {
               </Card.Text>
             </Card.Body>
             <ListGroup className="list-group-flush">
-
-              {/* Agrega los tags al post */}
               <ListGroup.Item>
                 Tags: {(post.Tags.length > 0)
                   ? post.Tags.map((tag) => (<span className={styles.tag}>{tag.name}</span>))
                   : 'Ningun tag asociado'}
               </ListGroup.Item>
 
-              {/* Agrega el contador de comentarios */}
               <ListGroup.Item>
                 Comentarios: {commentsCount[post.id] ?? 'Cargando...'}
-
-                {/* Si hay comentarios, el icono de comentarios se pone verde, sino gris */}
                 <img
                   src={(commentsCount[post.id] == 0)
                     ? noComments
@@ -141,6 +189,27 @@ const Home = () => {
           </Card>
         ))}
       </div>
+
+      <div className="d-flex justify-content-center mt-4">
+        <nav>
+          <ul className="pagination">
+            <li className={`page-item ${currentPage === 1 && 'disabled'}`}>
+              <button className="page-link" onClick={() => setCurrentPage(prev => prev - 1)}>Anterior</button>
+            </li>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <li key={i + 1} className={`page-item ${currentPage === i + 1 && 'active'}`}>
+                <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+            <li className={`page-item ${currentPage === totalPages && 'disabled'}`}>
+              <button className="page-link" onClick={() => setCurrentPage(prev => prev + 1)}>Siguiente</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
     </div>
   );
 };
