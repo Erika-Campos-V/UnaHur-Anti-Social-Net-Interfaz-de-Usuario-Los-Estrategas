@@ -74,7 +74,7 @@ const Home = () => {
 
       {user && (
         <>
-          <h4 className="text-success mb-2">👋 Hola, {user.nickName}</h4>
+          <h4 className="text-success mb-2">Hola, {user.nickName}</h4>
           <Link to="/new-post" className="btn btn-primary mb-3">
             Crear nueva publicación
           </Link>

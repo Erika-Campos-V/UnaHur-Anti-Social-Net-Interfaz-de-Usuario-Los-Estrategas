@@ -7,9 +7,10 @@ const NewPost = () => {
   const navigate = useNavigate();
 
   const [description, setDescription] = useState("");
-  const [imageUrls, setImageUrls] = useState([""]); // array de inputs
+  const [imageUrls, setImageUrls] = useState([""]);
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [newTag, setNewTag] = useState(""); // NUEVO estado para crear una etiqueta
 
   // Obtener etiquetas desde la API
   useEffect(() => {
@@ -19,24 +20,37 @@ const NewPost = () => {
       .catch(err => console.error("Error al cargar tags", err));
   }, []);
 
-  // Agregar un nuevo input de imagen
   const addImageField = () => {
     setImageUrls([...imageUrls, ""]);
   };
 
-  // Manejar cambio en un input de imagen
   const updateImageUrl = (index, value) => {
     const newUrls = [...imageUrls];
     newUrls[index] = value;
     setImageUrls(newUrls);
   };
 
-  // Enviar formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!description.trim()) return alert("La descripción es obligatoria.");
 
     try {
+      let tagIds = [...selectedTags]; // Clonamos los tags seleccionados (por id)
+
+      // Si hay nuevo tag, lo creamos primero
+      if (newTag.trim()) {
+        const newTagRes = await fetch("http://localhost:3001/tags", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: newTag.trim() })
+        });
+
+        if (!newTagRes.ok) throw new Error("No se pudo crear el nuevo tag");
+
+        const createdTag = await newTagRes.json();
+        tagIds.push(createdTag.id);
+      }
+
       // Crear el post
       const postRes = await fetch("http://localhost:3001/posts", {
         method: "POST",
@@ -44,12 +58,15 @@ const NewPost = () => {
         body: JSON.stringify({
           description,
           userId: user.id,
-          tags: selectedTags
+          tags: tagIds
         }),
       });
+
+      if (!postRes.ok) throw new Error("No se pudo crear el post");
+
       const newPost = await postRes.json();
 
-      // Crear imágenes si hay URLs
+      // Crear imágenes asociadas
       for (const url of imageUrls) {
         if (url.trim()) {
           await fetch("http://localhost:3001/postimages", {
@@ -103,7 +120,7 @@ const NewPost = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Etiquetas</label>
+          <label className="form-label">Etiquetas existentes</label>
           <select
             className="form-select"
             multiple
@@ -113,9 +130,20 @@ const NewPost = () => {
             }
           >
             {tags.map(tag => (
-              <option key={tag.id} value={tag.name}>{tag.name}</option>
+              <option key={tag.id} value={tag.id}>{tag.name}</option>
             ))}
           </select>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Agregar nueva etiqueta (opcional)</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Ej: naturaleza, viajes..."
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+          />
         </div>
 
         <button type="submit" className="btn btn-success">Publicar</button>
