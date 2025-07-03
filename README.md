@@ -96,6 +96,30 @@ La API estará corriendo en:
 
 ⚠️ Asegurate de tener habilitado **CORS** para permitir el acceso desde [http://localhost:5173](http://localhost:5173).
 
+
+
+## 📂 Otro metodo de ejecutar el backend, archivo .zip
+
+1. Descargar y descomprimir el archivo `backend-api.zip`.
+2. Abrir una terminal dentro de la carpeta `backend-api`.
+3. Instalar las dependencias:
+
+```bash
+npm install
+```
+
+4. Crear y poblar la base de datos con datos de ejemplo:
+
+```bash
+node seed.js
+```
+
+5. Iniciar el servidor:
+
+```bash
+npm start
+```
+
 ---
 
 ## 🔀 Endpoints principales usados
@@ -122,7 +146,7 @@ GET    /tags                  → Listar etiquetas
 ```bash
 src/
 ├── assets/               # Imágenes del sistema
-├── components/           # Header, Footer.
+├── components/           # Header, PostCard, Footer.
 ├── context/              # Contexto de usuario (UserContext, UserProvider)
 ├── pages/                # Vistas principales (Home, Login, Register, Profile)
 ├── styles/               # CSS personalizado
