@@ -168,7 +168,7 @@ const PostDetail = () => {
                   </div>
                   {/* Icono de usuario, nickName y fecha */}
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={user} alt="icono de usuario" style={{ width: '20px', height: '20px', marginLeft: '3px', marginRight: '5px' }} />
+                    <img src={usuario} alt="icono de usuario" style={{ width: '20px', height: '20px', marginLeft: '3px', marginRight: '5px' }} />
                     <p style={{ marginBottom: '0px', fontSize: '20px' }}>{comment.User.nickName} - {new Date(comment.createdAt).toLocaleString('es-AR')}</p>
                   </div>
                 </div>
@@ -218,7 +218,7 @@ const PostDetail = () => {
 
         {/* Usuario */}
         <div style={{ display: 'flex', alignItems: 'center', paddingTop: '5px', borderBottom: '2px dashed #53ac59' }}>
-          <img src={user} alt="icono de usuario" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
+          <img src={usuario} alt="icono de usuario" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
           <p style={{ marginBottom: '0px', fontSize: '25px' }}>Usuario: {post.User.nickName}</p>
         </div>
 
@@ -239,8 +239,8 @@ const PostDetail = () => {
                 </div>
                 {/* Icono de usuario, nickName y fecha */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <img src={user} alt="icono de usuario" style={{ width: '20px', height: '20px', marginLeft: '3px', marginRight: '5px' }} />
-                  <p style={{ marginBottom: '0px', fontSize: '20px' }}>{comment.User.nickName} - {new Date(comment.createdAt).toLocaleString('es-AR')}</p>
+                  <img src={usuario} alt="icono de usuario" style={{ width: '20px', height: '20px', marginLeft: '3px', marginRight: '5px' }} />
+                  <p style={{ marginBottom: '0px', fontSize: '20px' }}>{comment.User.nickName} - {new Date(comment.createdAt).toLocaleString('es-AR', { hour12: false })}</p>
                 </div>
               </div>
             ))

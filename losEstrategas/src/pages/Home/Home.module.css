@@ -11,24 +11,48 @@
     min-height: 500px;
     display: flex;
     flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* sombra sutil */
+    background-color: #fff; /* fondo blanco para mejor contraste */
 }
 
 .cardImg {
     height: 400px;
     object-fit: cover;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0; /* línea divisoria con la fecha */
 }
 
 .tag {
     background-color: #53ac59;
-    padding: 5px;
-    padding-bottom: 5px;
-    border-radius: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
     margin-right: 5px;
+    font-size: 0.75rem;
+    color: #fff;
 }
+
+/* ✅ Bloque optimizado para la fecha de publicación */
+.fecha {
+    padding: 6px 12px;
+    color: #555;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px; /* separa el texto del icono */
+    border-bottom: 1px solid #eaeaea;
+    background-color: #f9f9f9;
+}
+
 
 @media (max-width: 600px) {
     .feed {
         flex-direction: column;
+    }
+
+    .card {
+        width: 90%;
     }
 }
 
