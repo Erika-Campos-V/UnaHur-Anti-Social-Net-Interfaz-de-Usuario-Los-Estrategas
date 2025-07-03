@@ -16,9 +16,7 @@ export const UserProvider = ({ children }) => {
   }, [user]);
 
   const login = async (nickName, password) => {
-    if (password !== "123456") {
-      return { success: false, message: "Contraseña incorrecta" };
-    }
+    
 
     try {
       const res = await fetch("http://localhost:3001/users");
@@ -27,6 +25,9 @@ export const UserProvider = ({ children }) => {
       const foundUser = users.find((u) => u.nickName === nickName);
       if (!foundUser) {
         return { success: false, message: "Usuario no encontrado" };
+      } 
+      else if (password !== "123456") {
+        return { success: false, message: "Contraseña incorrecta" };
       }
 
       setUser(foundUser);
