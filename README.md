@@ -122,7 +122,7 @@ GET    /tags                  → Listar etiquetas
 ```bash
 src/
 ├── assets/               # Imágenes del sistema
-├── components/           # Header, Footer.
+├── components/           # Header, PostCard, Footer.
 ├── context/              # Contexto de usuario (UserContext, UserProvider)
 ├── pages/                # Vistas principales (Home, Login, Register, Profile)
 ├── styles/               # CSS personalizado
