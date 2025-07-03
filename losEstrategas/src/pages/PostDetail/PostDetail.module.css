@@ -75,3 +75,18 @@
         border-top: 3px solid #53ac59;
     }
 }
+.cardImg {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 100%;
+}
+
+.cardImgPlaceholder {
+  height: 200px;
+  background-color: #d3d3d3; 
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 100%;
+}
