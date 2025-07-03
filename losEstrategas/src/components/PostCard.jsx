@@ -24,7 +24,7 @@ const PostCard = ({ post, image, commentsCount }) => (
 
     <Card.Body>
       <Card.Title>
-        Usuario: {post.User.nickName}
+        {post.User.nickName}
         <img src={usuario} alt="Usuario" style={{ width: '20px', marginLeft: '8px' }} />
       </Card.Title>
       <Card.Text>{post.description}</Card.Text>
