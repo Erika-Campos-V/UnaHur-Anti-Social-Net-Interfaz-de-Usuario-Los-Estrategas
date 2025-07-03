@@ -240,7 +240,7 @@ const PostDetail = () => {
                 {/* Icono de usuario, nickName y fecha */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <img src={usuario} alt="icono de usuario" style={{ width: '20px', height: '20px', marginLeft: '3px', marginRight: '5px' }} />
-                  <p style={{ marginBottom: '0px', fontSize: '20px' }}>{comment.User.nickName} - {new Date(comment.createdAt).toLocaleString('es-AR')}</p>
+                  <p style={{ marginBottom: '0px', fontSize: '20px' }}>{comment.User.nickName} - {new Date(comment.createdAt).toLocaleString('es-AR', { hour12: false })}</p>
                 </div>
               </div>
             ))

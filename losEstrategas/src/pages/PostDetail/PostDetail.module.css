@@ -35,7 +35,7 @@
 }
 
 .comentarioBubble {
-  background: #e0ffe0;
+  background: #53ac59;
   border-radius: 20px;
   padding: 12px 18px;
   margin: 10px 0;
@@ -55,7 +55,7 @@
   width: 0;
   height: 0;
   border: 10px solid transparent;
-  border-top: 10px solid #e0ffe0;
+  border-top: 10px solid #53ac59;
   border-bottom: 0;
 }
 
