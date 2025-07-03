@@ -161,6 +161,7 @@ const Home = () => {
               src={images[post.id]?.url || noImage}
               onError={img => { img.target.onerror = null; img.target.src = wrongImage; }}
             />
+
             <Card.Body className={styles.fecha}>
               <small>
                 {new Date(post.createdAt).toLocaleString('es-AR', { hour12: false })}

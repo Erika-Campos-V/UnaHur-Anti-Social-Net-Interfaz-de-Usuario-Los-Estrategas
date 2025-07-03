@@ -6,7 +6,7 @@
     grid-row-gap: 0px;
     border: 3px solid #53ac59;
     border-radius: 10px;
-    background-color: rgb(194, 194, 194);
+    background-color: #e8f0e6;
     margin-top: 30px
 }
 
@@ -35,7 +35,7 @@
 }
 
 .comentarioBubble {
-  background: #e0ffe0;
+  background: #53ac59;
   border-radius: 20px;
   padding: 12px 18px;
   margin: 10px 0;
@@ -55,13 +55,18 @@
   width: 0;
   height: 0;
   border: 10px solid transparent;
-  border-top: 10px solid #e0ffe0;
+  border-top: 10px solid #53ac59;
   border-bottom: 0;
 }
 
 .form {
     border-radius: 15px;
     width: 100%;
+}
+
+span.carousel-control-prev-icon,
+span.carousel-control-next-icon {
+ color: black !important;
 }
 
 @media (max-width: 990px) {
