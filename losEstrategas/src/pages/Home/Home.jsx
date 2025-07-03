@@ -8,7 +8,7 @@ import noImage from '../../assets/noImage.png'
 import chatBubble from '../../assets/mensajero.png'
 import noComments from '../../assets/mensajeroGris.png'
 import clock from '../../assets/clock.png'
-import usuario from '../../assets/usuario.png'
+import defaultUserImage from '../../assets/usuario.png';
 import wrongImage from '../../assets/wrongImage.png'
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
@@ -145,8 +145,14 @@ const Home = () => {
         {currentPosts.slice().map((post) => (
           <Card style={{ width: '25rem' }} key={post.id}>
             <Card.Body>
-              Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
-              <img src={clock} alt="Fecha de Publicacion" style={{ width: '20px', marginLeft: '8px', marginTop: '-4px' }} />
+              <Card.Title>
+                <img src={defaultUserImage} alt="Foto de Usuario" style={{ width: '20px', marginRight: '8px', marginTop: '-3px' }} />
+
+                {post.User.nickName}
+              </Card.Title>
+              <Card.Text>
+                {post.description}
+              </Card.Text>
             </Card.Body>
 
             <Card.Img
@@ -155,15 +161,18 @@ const Home = () => {
               src={images[post.id]?.url || noImage}
               onError={img => { img.target.onerror = null; img.target.src = wrongImage; }}
             />
-            <Card.Body>
-              <Card.Title>
-                Usuario: {post.User.nickName}
-                <img src={usuario} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px' }} />
-              </Card.Title>
-              <Card.Text>
-                {post.description}
-              </Card.Text>
+
+            <Card.Body className={styles.fecha}>
+              <small>
+                {new Date(post.createdAt).toLocaleString('es-AR', { hour12: false })}
+                <img
+                  src={clock}
+                  alt="Fecha de Publicacion"
+                  style={{ width: '16px', marginLeft: '6px', marginTop: '-2px' }}
+                />
+              </small>
             </Card.Body>
+
             <ListGroup className="list-group-flush">
               <ListGroup.Item>
                 Tags: {(post.Tags.length > 0)
