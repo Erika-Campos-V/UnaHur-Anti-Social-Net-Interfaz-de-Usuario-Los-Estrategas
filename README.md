@@ -97,7 +97,6 @@ La API estará corriendo en:
 ⚠️ Asegurate de tener habilitado **CORS** para permitir el acceso desde [http://localhost:5173](http://localhost:5173).
 
 
-
 ## 📂 Otro metodo de ejecutar el backend, archivo .zip
 
 1. Descargar y descomprimir el archivo `backend-api.zip`.
