@@ -8,7 +8,7 @@ import noImage from '../../assets/noImage.png'
 import chatBubble from '../../assets/mensajero.png'
 import noComments from '../../assets/mensajeroGris.png'
 import clock from '../../assets/clock.png'
-//import user from '../../assets/usuario.png'
+import usuario from '../../assets/usuario.png'
 import wrongImage from '../../assets/wrongImage.png'
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
@@ -158,7 +158,7 @@ const Home = () => {
             <Card.Body>
               <Card.Title>
                 Usuario: {post.User.nickName}
-                <img src={user} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px' }} />
+                <img src={usuario} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px' }} />
               </Card.Title>
               <Card.Text>
                 {post.description}

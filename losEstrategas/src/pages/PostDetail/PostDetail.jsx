@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import styles from "./PostDetail.module.css"
@@ -7,7 +7,7 @@ import styles from "./PostDetail.module.css"
 import noImage from "../../assets/noImage.png"
 import wrongImage from "../../assets/wrongImage.png"
 import clock from "../../assets/clock.png"
-import user from "../../assets/usuario.png"
+import usuario from "../../assets/usuario.png"
 import tag from "../../assets/tag.png"
 
 //Me importo lo necesario para utilizar el user que se logueo
@@ -29,7 +29,7 @@ const PostDetail = () => {
 
   const [comentarios, setComentarios] = useState([])
 
-  async function getPostById() {
+  const getPostById = useCallback(async () => {
     try {
 
       const data = await fetch(`http://localhost:3001/posts/${id}`)
@@ -40,9 +40,10 @@ const PostDetail = () => {
       setPost(postObtenido)
 
       //Guardar las imagenes del post
-      const res = await fetch(`http://localhost:3001/postImages/post/${postObtenido.id}`)
-      const images = await res.json()
+      const imagesRes = await fetch(`http://localhost:3001/postImages/post/${postObtenido.id}`)
+      const images = await imagesRes.json()
       setImages(images)
+
 
       //Guardar los comentarios del post
       const commentRes = await fetch(`http://localhost:3001/comments/post/${postObtenido.id}`)
@@ -52,7 +53,7 @@ const PostDetail = () => {
     } catch (error) {
       throw new Error('Error en la consulta a la base de datos, razon: ' + error)
     }
-  }
+  }, [id])
 
   async function agregarComentario(e) {
     //Previene que la pagina se recargue
@@ -69,10 +70,15 @@ const PostDetail = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           content: comentarioNuevo,
-          userId: user.id, //CAMBIAR DESPUES POR EL USER QUE ESTE PUESTO
+          userId: user.id,
           postId: post.id
         })
-      })
+      });
+
+      if (!res.ok) {
+        throw new Error("Error al publicar el comentario");
+      }
+
 
       //Me traigo devuelta todos los comentarios del post, incluido el nuevo
       //Y lo coloco en el estado de los comentarios
@@ -92,7 +98,7 @@ const PostDetail = () => {
   //Para que no este haciendo fetch a cada rato
   useEffect(() => {
     getPostById();
-  }, [])
+  }, [getPostById])
 
   //Le da tiempo a que se guarde un post para mostrar los datos
   if (!post) {
@@ -125,7 +131,7 @@ const PostDetail = () => {
           {/* Informacion de fecha */}
           <div style={{ display: 'flex', alignItems: 'center', paddingTop: '5px', borderBottom: '2px dashed #53ac59' }}>
             <img src={clock} alt="reloj" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
-            <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', {hour12: false})}</p>
+            <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', { hour12: false })}</p>
           </div>
 
           {/* Tags del post */}
@@ -139,7 +145,7 @@ const PostDetail = () => {
 
           {/* Usuario */}
           <div style={{ display: 'flex', alignItems: 'center', paddingTop: '5px', borderBottom: '2px dashed #53ac59' }}>
-            <img src={user} alt="icono de usuario" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
+            <img src={usuario} alt="icono de usuario" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
             <p style={{ marginBottom: '0px', fontSize: '25px' }}>Usuario: {post.User.nickName}</p>
           </div>
 
@@ -198,7 +204,7 @@ const PostDetail = () => {
         {/* Informacion de fecha */}
         <div style={{ display: 'flex', alignItems: 'center', paddingTop: '5px', borderBottom: '2px dashed #53ac59' }}>
           <img src={clock} alt="reloj" style={{ width: '25px', height: '25px', marginLeft: '3px', marginRight: '5px' }} />
-          <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', {hour12: false})}</p>
+          <p style={{ marginBottom: '0px', fontSize: '25px' }}>Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR', { hour12: false })}</p>
         </div>
 
         {/* Tags del post */}
@@ -241,17 +247,17 @@ const PostDetail = () => {
           }
           {/* Agregar comentarios */}
           {user ? (
-              <form onSubmit={agregarComentario} style={{ marginTop: "30px", marginBottom: "20px" }}>
-                <textarea className={styles.form} name="Nuevo comentario" placeholder='Esto es lo que opino de tu post: ...' />
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <button type='submit' className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Publicar comentario</button>
-                </div>
-              </form>
-            ) : (
-              <p style={{ color: "#53ac59", fontWeight: "bold", marginLeft: "20px", marginTop: "30px" }}>
-                Iniciá sesión para comentar.
-              </p>
-            )}
+            <form onSubmit={agregarComentario} style={{ marginTop: "30px", marginBottom: "20px" }}>
+              <textarea className={styles.form} name="Nuevo comentario" placeholder='Esto es lo que opino de tu post: ...' />
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <button type='submit' className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Publicar comentario</button>
+              </div>
+            </form>
+          ) : (
+            <p style={{ color: "#53ac59", fontWeight: "bold", marginLeft: "20px", marginTop: "30px" }}>
+              Iniciá sesión para comentar.
+            </p>
+          )}
         </div>
 
 

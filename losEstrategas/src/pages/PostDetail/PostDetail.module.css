@@ -6,7 +6,7 @@
     grid-row-gap: 0px;
     border: 3px solid #53ac59;
     border-radius: 10px;
-    background-color: rgb(194, 194, 194);
+    background-color: #e8f0e6;
     margin-top: 30px
 }
 
@@ -62,6 +62,11 @@
 .form {
     border-radius: 15px;
     width: 100%;
+}
+
+span.carousel-control-prev-icon,
+span.carousel-control-next-icon {
+ color: black !important;
 }
 
 @media (max-width: 990px) {
