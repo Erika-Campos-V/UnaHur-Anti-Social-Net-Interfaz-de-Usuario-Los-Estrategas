@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
 import styles from './Home.module.css';
 import { Link } from 'react-router-dom';
-
-import noImage from '../../assets/noImage.png'
-import chatBubble from '../../assets/mensajero.png'
-import noComments from '../../assets/mensajeroGris.png'
-import clock from '../../assets/clock.png'
-import usuario from '../../assets/usuario.png'
-import wrongImage from '../../assets/wrongImage.png'
+import PostCard from '../../components/PostCard';
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
@@ -141,54 +133,16 @@ const Home = () => {
 
       {/* Feed */}
       <div className={styles.feed}>
-
-        {currentPosts.slice().map((post) => (
-          <Card style={{ width: '25rem' }} key={post.id}>
-            <Card.Body>
-              Fecha publicacion: {new Date(post.createdAt).toLocaleString('es-AR')}
-              <img src={clock} alt="Fecha de Publicacion" style={{ width: '20px', marginLeft: '8px', marginTop: '-4px' }} />
-            </Card.Body>
-
-            <Card.Img
-              variant="top"
-              className={styles.cardImg}
-              src={images[post.id]?.url || noImage}
-              onError={img => { img.target.onerror = null; img.target.src = wrongImage; }}
-            />
-            <Card.Body>
-              <Card.Title>
-                Usuario: {post.User.nickName}
-                <img src={usuario} alt="Foto de Usuario" style={{ width: '20px', marginLeft: '8px', marginTop: '-3px' }} />
-              </Card.Title>
-              <Card.Text>
-                {post.description}
-              </Card.Text>
-            </Card.Body>
-            <ListGroup className="list-group-flush">
-              <ListGroup.Item>
-                Tags: {(post.Tags.length > 0)
-                  ? post.Tags.map((tag) => (<span className={styles.tag}>{tag.name}</span>))
-                  : 'Ningun tag asociado'}
-              </ListGroup.Item>
-
-              <ListGroup.Item>
-                Comentarios: {commentsCount[post.id] ?? 'Cargando...'}
-                <img
-                  src={(commentsCount[post.id] == 0)
-                    ? noComments
-                    : chatBubble
-                  }
-                  alt="comentarios"
-                  style={{ width: '20px', marginLeft: '8px', verticalAlign: 'middle' }}
-                />
-              </ListGroup.Item>
-            </ListGroup>
-            <Card.Body>
-              <Link to={`/post/${post.id}`} className='btn btn-success' style={{ backgroundColor: "#53ac59" }}>Ver publicacion completa</Link>
-            </Card.Body>
-          </Card>
+        {currentPosts.map((post) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            image={images[post.id]}
+            commentsCount={commentsCount[post.id]}
+          />
         ))}
       </div>
+      
 
       <div className="d-flex justify-content-center mt-4">
         <nav>
